@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Heart Constellation - Happy Birthday My Love!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: radial-gradient(circle at center, #0a0a2a 0%, #0c0c1d 30%, #000010 70%);
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* 3D Heart Container */
+        #heart3d {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: 2;
+            filter: drop-shadow(0 0 40px rgba(255, 105, 180, 0.5));
+            animation: heartFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes heartFloat {
+            0%, 100% { transform: translate(-50%, -50%) rotateY(0deg) scale(1); }
+            25% { transform: translate(-50%, -52%) rotateY(10deg) scale(1.05); }
+            50% { transform: translate(-50%, -50%) rotateY(0deg) scale(1); }
+            75% { transform: translate(-50%, -52%) rotateY(-10deg) scale(1.05); }
+        }
+        
+        .message {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            padding: 2.5rem 3rem;
+            background: rgba(10, 10, 30, 0.85);
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
+                        inset 0 0 80px rgba(255, 105, 180, 0.15),
+                        0 0 100px rgba(255, 20, 147, 0.3);
+            margin-top: 2rem;
+            max-width: 650px;
+            transform-style: preserve-3d;
+            transform: translateZ(50px);
+            animation: messageFloat 8s ease-in-out infinite;
+        }
+        
+        @keyframes messageFloat {
+            0%, 100% { transform: translateZ(50px) translateY(0); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8); }
+            50% { transform: translateZ(50px) translateY(-10px); box-shadow: 0 40px 80px rgba(0, 0, 0, 1); }
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1, #ffd700, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 105, 180, 0.5);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        
+        .romantic-text {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #e6e6ff;
+            margin-bottom: 1.8rem;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .heart-message {
+            font-size: 1.8rem;
+            color: #ff69b4;
+            margin-top: 1.5rem;
+            font-weight: bold;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 4;
+            display: flex;
+            gap: 15px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 182, 193, 0.1));
+            color: white;
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.4), rgba(255, 182, 193, 0.2));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4);
+            border-color: rgba(255, 105, 180, 0.6);
+        }
+        
+        /* Music Controls */
+        #music-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(10, 10, 30, 0.8);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+        }
+        
+        #toggle-music {
+            background: none;
+            border: none;
+            color: #ff69b4;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        #toggle-music:hover {
+            transform: scale(1.2) rotate(15deg);
+            color: #ffb6c1;
+        }
+        
+        #music-status {
+            font-size: 0.9rem;
+            color: #ffb6c1;
+            font-weight: 500;
+        }
+        
+        /* YouTube Player */
+        #youtube-player {
+            display: none;
+        }
+        
+        /* Floating Hearts */
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            color: #ff69b4;
+            opacity: 0;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+            pointer-events: none;
+        }
+        
+        /* Romantic Particles */
+        .love-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #ff69b4, #ffb6c1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+        }
+        
+        /* Shooting Stars */
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 10px 2px white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, white, transparent);
+            transform: translateX(-100%);
+        }
+        
+        /* Enhanced Flower Animations */
+        .flower {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.5));
+        }
+        
+        .flower-petal {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #ff69b4, #ff1493);
+            border-radius: 50% 50% 50% 0;
+            transform-origin: center center;
+            opacity: 0;
+            box-shadow: 0 0 25px rgba(255, 20, 147, 0.4);
+            animation: petalBloom 3s ease-out forwards, petalGlow 4s ease-in-out infinite;
+        }
+        
+        .flower-center {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle at 30% 30%, #ffd700, #ff8c00);
+            border-radius: 50%;
+            z-index: 1;
+            opacity: 0;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            animation: centerBloom 3s ease-out 0.5s forwards, centerGlow 4s ease-in-out 0.5s infinite;
+        }
+        
+        @keyframes petalBloom {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            70% { transform: scale(1.1) rotate(360deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 0.9; }
+        }
+        
+        @keyframes petalGlow {
+            0%, 100% { opacity: 0.7; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.3); }
+        }
+        
+        @keyframes centerBloom {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes centerGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.9); }
+        }
+        
+        /* Constellation Effects */
+        .constellation-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 182, 193, 0.8), transparent);
+            z-index: 1;
+            transform-origin: left center;
+            pointer-events: none;
+        }
+        
+        /* Instruction Panel */
+        .instructions {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 4;
+            background: rgba(10, 10, 30, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            max-width: 250px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .instructions:hover {
+            opacity: 1;
+        }
+        
+        .instructions h3 {
+            color: #ffb6c1;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .instructions p {
+            font-size: 0.8rem;
+            color: #ccccff;
+            margin-bottom: 5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .romantic-text { font-size: 1.1rem; }
+            .heart-message { font-size: 1.4rem; }
+            .message { padding: 1.5rem; margin: 1rem; }
+            #heart3d { transform: translate(-50%, -50%) scale(0.7); }
+            .controls { bottom: 20px; right: 20px; flex-direction: column; }
+            #music-controls { bottom: 20px; left: 20px; }
+            .instructions { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 3D Heart Element -->
+        <div id="heart3d"></div>
+        
+        <!-- Romantic Flowers -->
+        <div class="flower" id="flower1" style="top: 20%; left: 10%;">
+            <div class="flower-center"></div>
+            <div class="flower-petal" style="transform: rotate(0deg) translateX(35px); animation-delay: 0.2s;"></div>
+            <div class="flower-petal" style="transform: rotate(60deg) translateX(35px); animation-delay: 0.4s;"></div>
+            <div class="flower-petal" style="transform: rotate(120deg) translateX(35px); animation-delay: 0.6s;"></div>
+            <div class="flower-petal" style="transform: rotate(180deg) translateX(35px); animation-delay: 0.8s;"></div>
+            <div class="flower-petal" style="transform: rotate(240deg) translateX(35px); animation-delay: 1.0s;"></div>
+            <div class="flower-petal" style="transform: rotate(300deg) translateX(35px); animation-delay: 1.2s;"></div>
+        </div>
+        
+        <div class="flower" id="flower2" style="top: 80%; right: 15%;">
+            <div class="flower-center"></div>
+            <div class="flower-petal" style="transform: rotate(0deg) translateX(25px); animation-delay: 1.4s;"></div>
+            <div class="flower-petal" style="transform: rotate(60deg) translateX(25px); animation-delay: 1.6s;"></div>
+            <div class="flower-petal" style="transform: rotate(120deg) translateX(25px); animation-delay: 1.8s;"></div>
+            <div class="flower-petal" style="transform: rotate(180deg) translateX(25px); animation-delay: 2.0s;"></div>
+            <div class="flower-petal" style="transform: rotate(240deg) translateX(25px); animation-delay: 2.2s;"></div>
+            <div class="flower-petal" style="transform: rotate(300deg) translateX(25px); animation-delay: 2.4s;"></div>
+        </div>
+        
+        <canvas id="constellationCanvas"></canvas>
+        
+        <div class="message">
+            <h1>💖 To My Eternal Love 💖</h1>
+            <p class="romantic-text">In the vast universe of possibilities, my heart found its home in yours.</p>
+            <p class="romantic-text">Every star you see represents a moment I've cherished with you.</p>
+            <div class="heart-message">Happy Birthday My Love! 💕🎂</div>
+        </div>
+        
+        <div class="controls">
+            <button id="sparkleBtn">✨ Sparkle Magic</button>
+            <button id="heartsBtn">💕 Love Burst</button>
+            <button id="resetBtn">🔄 Renew Love</button>
+        </div>
+        
+        <!-- YouTube Player Container - Corrigé -->
+        <iframe id="youtube-player" 
+                width="0" 
+                height="0" 
+                src="https://www.youtube.com/embed/NBIKVLUIEnY?enablejsapi=1&autoplay=0&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=NBIKVLUIEnY"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="display: none;">
+        </iframe>
+        
+        <!-- Music Controls -->
+        <div id="music-controls">
+    <button id="toggle-music">🎵</button>
+    <span id="music-status">Music: Ready</span>
+</div>
+
+<!-- Audio caché pour la musique locale -->
+<audio id="local-music" loop style="display: none;">
+    <source src="./song.mp3" type="audio/mpeg">
+    Votre navigateur ne supporte pas l'élément audio.
+</audio>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>💖 Controls</h3>
+            <p>✨ Click stars to sparkle them</p>
+            <p>💕 Click for love bursts</p>
+            <p>🎵 Link to music video</p>
+            <p>Spacebar: Grand Sparkle</p>
+            <p>R: Reset animation</p>
+        </div>
+    </div>
+
+    <script>
+        // Music Player - Local Audio
+const audioElement = document.getElementById('local-music');
+let isMusicPlaying = false;
+
+// Set volume to 50%
+audioElement.volume = 0.5;
+
+// Update music status display
+function updateMusicStatus(text) {
+    const statusElement = document.getElementById('music-status');
+    if (statusElement) {
+        statusElement.textContent = text;
+    }
+}
+
+// Play music function
+function playMusic() {
+    audioElement.play()
+        .then(() => {
+            isMusicPlaying = true;
+            updateMusicStatus('Music: Playing ♫');
+            document.getElementById('toggle-music').textContent = '⏸️';
+            console.log("🎵 Music started successfully");
+        })
+        .catch(error => {
+            console.error("Error playing music:", error);
+            updateMusicStatus('Music: Click to play');
+            
+            // Essayer encore après un clic utilisateur
+            const retryOnClick = () => {
+                audioElement.play()
+                    .then(() => {
+                        isMusicPlaying = true;
+                        updateMusicStatus('Music: Playing ♫');
+                        document.getElementById('toggle-music').textContent = '⏸️';
+                    })
+                    .catch(err => {
+                        console.error("Still error:", err);
+                        updateMusicStatus('Music: Error loading');
+                    });
+                document.removeEventListener('click', retryOnClick);
+            };
+            
+            document.addEventListener('click', retryOnClick);
+        });
+}
+
+// Pause music function
+function pauseMusic() {
+    audioElement.pause();
+    isMusicPlaying = false;
+    updateMusicStatus('Music: Paused');
+    document.getElementById('toggle-music').textContent = '🎵';
+}
+
+// Toggle music
+function toggleMusic() {
+    if (isMusicPlaying) {
+        pauseMusic();
+    } else {
+        playMusic();
+    }
+}
+
+// Initialize music player
+document.getElementById('toggle-music').addEventListener('click', toggleMusic);
+
+// Initial status
+updateMusicStatus('Music: Click to play');
+
+// Essayer de précharger la musique
+audioElement.load();
+
+// Détecter quand la musique est prête
+audioElement.addEventListener('canplaythrough', function() {
+    console.log("Music is ready to play");
+    updateMusicStatus('Music: Ready to play');
+});
+
+// Détecter les erreurs de chargement
+audioElement.addEventListener('error', function(e) {
+    console.error("Audio loading error:", e);
+    updateMusicStatus('Music: Error loading file');
+    
+    // Vérifier si le fichier existe
+    fetch('./song.mp3')
+        .then(response => {
+            if (!response.ok) {
+                updateMusicStatus('Music: File not found');
+            }
+        })
+        .catch(err => {
+            console.error("File check error:", err);
+            updateMusicStatus('Music: File not found');
+        });
+});
+        
+
+        // 3D Heart Rendering
+        const heartContainer = document.getElementById('heart3d');
+        const heartCanvas = document.createElement('canvas');
+        heartCanvas.width = 300;
+        heartCanvas.height = 300;
+        heartContainer.appendChild(heartCanvas);
+        const heartCtx = heartCanvas.getContext('2d');
+
+        // Main Constellation Canvas
+        const canvas = document.getElementById('constellationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            heartCanvas.width = 300;
+            heartCanvas.height = 300;
+            heartCanvas.style.width = '300px';
+            heartCanvas.style.height = '300px';
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Enhanced Star Class
+        class Star {
+            constructor() {
+                this.reset();
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.brightness = Math.random() * 0.6 + 0.4;
+                this.twinkleSpeed = Math.random() * 0.03 + 0.02;
+                this.twinkleOffset = Math.random() * Math.PI * 2;
+                this.hue = Math.random() * 30 + 330; // Pink to red hues
+                this.sparkling = false;
+                this.sparkleProgress = 0;
+                this.orbitRadius = Math.random() * 50 + 20;
+                this.orbitSpeed = Math.random() * 0.02 + 0.01;
+                this.orbitAngle = Math.random() * Math.PI * 2;
+                this.originalX = this.x;
+                this.originalY = this.y;
+            }
+            
+            update(time) {
+                // Orbital motion
+                this.orbitAngle += this.orbitSpeed;
+                this.x = this.originalX + Math.cos(this.orbitAngle) * this.orbitRadius;
+                this.y = this.originalY + Math.sin(this.orbitAngle) * this.orbitRadius;
+                
+                // Twinkle effect
+                this.brightness = 0.4 + 0.6 * Math.sin(time * this.twinkleSpeed + this.twinkleOffset);
+                
+                // Sparkle animation
+                if (this.sparkling) {
+                    this.sparkleProgress += 0.08;
+                    if (this.sparkleProgress > 1) {
+                        this.sparkling = false;
+                        this.sparkleProgress = 0;
+                    }
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                
+                if (this.sparkling) {
+                    const sparkleSize = this.size * (1 + this.sparkleProgress * 3);
+                    const opacity = this.brightness * (1 - this.sparkleProgress * 0.8);
+                    
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, sparkleSize
+                    );
+                    gradient.addColorStop(0, `hsla(${this.hue}, 100%, 70%, ${opacity})`);
+                    gradient.addColorStop(0.5, `hsla(${this.hue}, 100%, 80%, ${opacity * 0.5})`);
+                    gradient.addColorStop(1, `hsla(${this.hue}, 100%, 90%, 0)`);
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.arc(this.x, this.y, sparkleSize, 0, Math.PI * 2);
+                } else {
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, ${this.brightness * 100}%, ${this.brightness * 0.9})`;
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    
+                    // Enhanced glow
+                    const glow = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.size * 4
+                    );
+                    glow.addColorStop(0, `hsla(${this.hue}, 100%, 80%, ${this.brightness * 0.4})`);
+                    glow.addColorStop(1, `hsla(${this.hue}, 100%, 80%, 0)`);
+                    
+                    ctx.save();
+                    ctx.fillStyle = glow;
+                    ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+                
+                ctx.fill();
+            }
+            
+            sparkle() {
+                this.sparkling = true;
+                this.sparkleProgress = 0;
+            }
+        }
+
+        // 3D Heart Animation
+        class Heart3D {
+            constructor() {
+                this.rotation = 0;
+                this.scale = 1;
+                this.pulse = 0;
+                this.beat = 0;
+                this.time = 0;
+            }
+            
+            update(time) {
+                this.time = time;
+                this.rotation += 0.005;
+                this.pulse = Math.sin(time * 0.002) * 0.2 + 1;
+                this.beat = Math.sin(time * 0.01) * 0.05;
+            }
+            
+            draw() {
+                heartCtx.clearRect(0, 0, heartCanvas.width, heartCanvas.height);
+                
+                // Draw 3D heart with gradient and effects
+                const centerX = heartCanvas.width / 2;
+                const centerY = heartCanvas.height / 2;
+                const heartSize = 60 * this.pulse;
+                
+                // Create heart path
+                heartCtx.beginPath();
+                for (let i = 0; i <= Math.PI * 2; i += 0.01) {
+                    const t = i;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                    
+                    const rotatedX = x * Math.cos(this.rotation) - y * Math.sin(this.rotation);
+                    const rotatedY = x * Math.sin(this.rotation) + y * Math.cos(this.rotation);
+                    
+                    const px = centerX + rotatedX * heartSize * 0.02;
+                    const py = centerY + rotatedY * heartSize * 0.02;
+                    
+                    if (i === 0) {
+                        heartCtx.moveTo(px, py);
+                    } else {
+                        heartCtx.lineTo(px, py);
+                    }
+                }
+                heartCtx.closePath();
+                
+                // Heart gradient
+                const gradient = heartCtx.createLinearGradient(0, 0, heartCanvas.width, heartCanvas.height);
+                gradient.addColorStop(0, '#ff69b4');
+                gradient.addColorStop(0.5, '#ff1493');
+                gradient.addColorStop(1, '#ff0066');
+                
+                heartCtx.fillStyle = gradient;
+                heartCtx.shadowColor = '#ff69b4';
+                heartCtx.shadowBlur = 30 + this.beat * 300;
+                heartCtx.shadowOffsetX = 0;
+                heartCtx.shadowOffsetY = 0;
+                heartCtx.fill();
+                
+                // Inner glow
+                heartCtx.beginPath();
+                heartCtx.arc(centerX, centerY, 40, 0, Math.PI * 2);
+                const innerGlow = heartCtx.createRadialGradient(
+                    centerX, centerY, 0,
+                    centerX, centerY, 80
+                );
+                innerGlow.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
+                innerGlow.addColorStop(0.5, 'rgba(255, 105, 180, 0.3)');
+                innerGlow.addColorStop(1, 'transparent');
+                
+                heartCtx.fillStyle = innerGlow;
+                heartCtx.fill();
+                
+                // Add sparkles around heart
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2 + this.rotation;
+                    const sparkleX = centerX + Math.cos(angle) * 120;
+                    const sparkleY = centerY + Math.sin(angle) * 120;
+                    
+                    heartCtx.beginPath();
+                    heartCtx.arc(sparkleX, sparkleY, 3 + Math.sin(this.rotation * 2 + i) * 2, 0, Math.PI * 2);
+                    heartCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    heartCtx.fill();
+                }
+            }
+        }
+
+        // Enhanced Constellation System
+        class EnhancedConstellation {
+            constructor() {
+                this.stars = [];
+                this.connections = [];
+                this.heart3d = new Heart3D();
+                this.time = 0;
+                this.sparkleQueue = [];
+                this.initialize();
+            }
+            
+            initialize() {
+                // Create stars
+                const starCount = Math.min(300, Math.floor((canvas.width * canvas.height) / 3000));
+                for (let i = 0; i < starCount; i++) {
+                    this.stars.push(new Star());
+                }
+                
+                // Create connections between stars
+                this.createConnections();
+                
+                // Start effects
+                this.startEffects();
+            }
+            
+            createConnections() {
+                this.connections = [];
+                for (let i = 0; i < this.stars.length; i++) {
+                    for (let j = i + 1; j < this.stars.length; j++) {
+                        const star1 = this.stars[i];
+                        const star2 = this.stars[j];
+                        const distance = Math.sqrt(
+                            Math.pow(star1.x - star2.x, 2) + 
+                            Math.pow(star1.y - star2.y, 2)
+                        );
+                        
+                        if (distance < 150) {
+                            this.connections.push({
+                                star1: star1,
+                                star2: star2,
+                                distance: distance,
+                                opacity: Math.random() * 0.3 + 0.1
+                            });
+                        }
+                    }
+                }
+            }
+            
+            startEffects() {
+                // Floating hearts
+                setInterval(() => this.createFloatingHeart(), 2000);
+                
+                // Love particles
+                setInterval(() => this.createLoveParticle(), 300);
+                
+                // Shooting stars
+                setInterval(() => this.createShootingStar(), 5000);
+            }
+            
+            createFloatingHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                document.querySelector('.container').appendChild(heart);
+                
+                const duration = 3000 + Math.random() * 2000;
+                const startX = parseFloat(heart.style.left);
+                const endX = startX + (Math.random() - 0.5) * 200;
+                
+                const animation = heart.animate([
+                    { 
+                        transform: 'translateY(100vh) rotate(0deg)',
+                        opacity: 0 
+                    },
+                    { 
+                        transform: `translateY(-100px) translateX(${endX - startX}px) rotate(360deg)`,
+                        opacity: 0.8 
+                    },
+                    { 
+                        transform: `translateY(-100vh) translateX(${(endX - startX) * 2}px) rotate(720deg)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                };
+            }
+            
+            createLoveParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'love-particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = '100vh';
+                document.querySelector('.container').appendChild(particle);
+                
+                const duration = 2000 + Math.random() * 1000;
+                
+                particle.animate([
+                    { 
+                        transform: 'translateY(0) scale(1)',
+                        opacity: 0 
+                    },
+                    { 
+                        transform: `translateY(${-Math.random() * 100 - 50}px) scale(${Math.random() * 2 + 1})`,
+                        opacity: 0.8 
+                    },
+                    { 
+                        transform: `translateY(${-Math.random() * 300 - 200}px) scale(0)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: duration,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                }).onfinish = () => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                };
+            }
+            
+            createShootingStar() {
+                const star = document.createElement('div');
+                star.className = 'shooting-star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 50 + 'vh';
+                document.querySelector('.container').appendChild(star);
+                
+                star.animate([
+                    { 
+                        transform: 'translateX(0) translateY(0)',
+                        opacity: 0 
+                    },
+                    { 
+                        transform: `translateX(-200px) translateY(100px)`,
+                        opacity: 1 
+                    },
+                    { 
+                        transform: `translateX(-400px) translateY(200px)`,
+                        opacity: 0 
+                    }
+                ], {
+                    duration: 1000,
+                    easing: 'linear'
+                }).onfinish = () => {
+                    if (star.parentNode) {
+                        star.parentNode.removeChild(star);
+                    }
+                };
+            }
+            
+            update() {
+                this.time += 0.016;
+                
+                // Update 3D heart
+                this.heart3d.update(this.time);
+                
+                // Update stars
+                this.stars.forEach(star => star.update(this.time));
+                
+                // Update connections
+                this.connections.forEach(conn => {
+                    conn.opacity = 0.1 + 0.2 * Math.sin(this.time * 0.001 + conn.distance * 0.01);
+                });
+                
+                // Update sparkle queue
+                if (this.sparkleQueue.length > 0 && Math.floor(this.time * 60) % 5 === 0) {
+                    const star = this.sparkleQueue.shift();
+                    if (star) star.sparkle();
+                }
+            }
+            
+            draw() {
+                // Clear with deep space gradient
+                const gradient = ctx.createRadialGradient(
+                    canvas.width/2, canvas.height/2, 0,
+                    canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)/2
+                );
+                gradient.addColorStop(0, 'rgba(10, 10, 42, 0.8)');
+                gradient.addColorStop(1, 'rgba(0, 0, 20, 1)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections
+                this.drawConnections();
+                
+                // Draw stars
+                this.stars.forEach(star => star.draw());
+                
+                // Draw 3D heart
+                this.heart3d.draw();
+            }
+            
+            drawConnections() {
+                this.connections.forEach(conn => {
+                    const gradient = ctx.createLinearGradient(
+                        conn.star1.x, conn.star1.y,
+                        conn.star2.x, conn.star2.y
+                    );
+                    
+                    gradient.addColorStop(0, `rgba(255, 105, 180, ${conn.opacity})`);
+                    gradient.addColorStop(0.5, `rgba(255, 182, 193, ${conn.opacity * 0.7})`);
+                    gradient.addColorStop(1, `rgba(255, 105, 180, ${conn.opacity})`);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(conn.star1.x, conn.star1.y);
+                    ctx.lineTo(conn.star2.x, conn.star2.y);
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                });
+            }
+            
+            sparkleRandomStars(count = 15) {
+                for (let i = 0; i < count; i++) {
+                    const randomStar = this.stars[Math.floor(Math.random() * this.stars.length)];
+                    this.sparkleQueue.push(randomStar);
+                }
+            }
+            
+            createLoveBurst(x, y) {
+                for (let i = 0; i < 20; i++) {
+                    const angle = (i / 20) * Math.PI * 2;
+                    const distance = Math.random() * 100 + 50;
+                    const targetX = x + Math.cos(angle) * distance;
+                    const targetY = y + Math.sin(angle) * distance;
+                    
+                    // Create love particle at click location
+                    const particle = document.createElement('div');
+                    particle.className = 'love-particle';
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.width = '8px';
+                    particle.style.height = '8px';
+                    document.querySelector('.container').appendChild(particle);
+                    
+                    // Animate particle
+                    particle.animate([
+                        { 
+                            transform: 'translate(0, 0) scale(1)',
+                            opacity: 1 
+                        },
+                        { 
+                            transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`,
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 1000,
+                        easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                    }).onfinish = () => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    };
+                }
+                
+                // Sparkle nearby stars
+                this.stars.forEach(star => {
+                    const distance = Math.sqrt(Math.pow(star.x - x, 2) + Math.pow(star.y - y, 2));
+                    if (distance < 200) {
+                        setTimeout(() => star.sparkle(), Math.random() * 300);
+                    }
+                });
+            }
+            
+            reset() {
+                this.stars.forEach(star => star.reset());
+                this.createConnections();
+                this.time = 0;
+                this.sparkleQueue = [];
+            }
+        }
+
+        // Initialize constellation
+        let constellation;
+        
+        function initConstellation() {
+            constellation = new EnhancedConstellation();
+            animate();
+        }
+        
+        // Animation loop
+        function animate() {
+            if (constellation) {
+                constellation.update();
+                constellation.draw();
+            }
+            requestAnimationFrame(animate);
+        }
+        
+        // Start animation after DOM is loaded
+        window.addEventListener('load', () => {
+            initConstellation();
+        });
+        
+        // Event Listeners
+        document.getElementById('sparkleBtn').addEventListener('click', () => {
+            if (constellation) {
+                constellation.sparkleRandomStars(20);
+            }
+        });
+        
+        document.getElementById('heartsBtn').addEventListener('click', () => {
+            if (constellation && canvas) {
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                constellation.createLoveBurst(centerX, centerY);
+            }
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (constellation) {
+                constellation.reset();
+            }
+        });
+        
+        // Click interaction
+        canvas.addEventListener('click', (event) => {
+            if (!constellation) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            // Create love burst at click location
+            constellation.createLoveBurst(x, y);
+            
+            // Sparkle nearest star
+            let nearestStar = null;
+            let minDistance = Infinity;
+            
+            constellation.stars.forEach(star => {
+                const distance = Math.sqrt(Math.pow(star.x - x, 2) + Math.pow(star.y - y, 2));
+                if (distance < minDistance && distance < 80) {
+                    minDistance = distance;
+                    nearestStar = star;
+                }
+            });
+            
+            if (nearestStar) {
+                nearestStar.sparkle();
+            }
+        });
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (event) => {
+            if (!constellation) return;
+            
+            if (event.code === 'Space') {
+                constellation.sparkleRandomStars(25);
+                if (canvas) {
+                    constellation.createLoveBurst(
+                        canvas.width / 2,
+                        canvas.height / 2
+                    );
+                }
+                event.preventDefault();
+            } else if (event.code === 'KeyR') {
+                constellation.reset();
+            } else if (event.code === 'KeyH') {
+                // Create heart shape burst
+                if (!canvas) return;
+                for (let i = 0; i < 50; i++) {
+                    const t = (i / 50) * Math.PI * 2;
+                    const x = 16 * Math.pow(Math.sin(t), 3);
+                    const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+                    const burstX = canvas.width/2 + x * 2;
+                    const burstY = canvas.height/2 - y * 2;
+                    setTimeout(() => {
+                        constellation.createLoveBurst(burstX, burstY);
+                    }, i * 30);
+                }
+            }
+        });
+        
+        // Add romantic message rotation
+        const messages = [
+            "My love for you is written in the stars",
+            "You are my universe, my everything",
+            "Every moment with you is magical",
+            "Our love story is my favorite constellation",
+            "You make my world brighter than any star",
+            "POCO & LOCO ❤️"
+        ];
+        
+        let messageIndex = 0;
+        setInterval(() => {
+            const romanticTexts = document.querySelectorAll('.romantic-text');
+            romanticTexts.forEach((text, index) => {
+                if (index === 1) { // Rotate only the second message
+                    text.style.opacity = '0';
+                    setTimeout(() => {
+                        text.textContent = messages[messageIndex];
+                        messageIndex = (messageIndex + 1) % messages.length;
+                        text.style.opacity = '1';
+                    }, 500);
+                }
+            });
+        }, 5000);
+       
+    </script>
+</body>
+</html>
