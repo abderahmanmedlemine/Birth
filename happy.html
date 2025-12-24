@@ -411,7 +411,7 @@
 
 <!-- Audio caché pour la musique locale -->
 <audio id="local-music" loop style="display: none;">
-    <source src="./song.mp3" type="audio/mpeg">
+    <source src="song.mp3" type="audio/mpeg">
     Votre navigateur ne supporte pas l'élément audio.
 </audio>
         
@@ -512,7 +512,7 @@ audioElement.addEventListener('error', function(e) {
     updateMusicStatus('Music: Error loading file');
     
     // Vérifier si le fichier existe
-    fetch('./song.mp3')
+    fetch('song.mp3')
         .then(response => {
             if (!response.ok) {
                 updateMusicStatus('Music: File not found');
